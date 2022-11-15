@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
-app.use( (req, res, next) => {
-    res.status(200).send({ message: "Server running..."});
-});
+const testRouter = require('./routes/testRouter');
+
+app.use('/test', testRouter);
 
 module.exports = app;
