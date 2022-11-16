@@ -25,4 +25,10 @@ router.post('/', (req, res, next) => {
     });
 });
 
+router.delete('/:id', (req, res, next) =>{
+    res.status(200).send({
+        message: "Product removed successfully"
+    });
+});
+
 module.exports = router;
