@@ -1,13 +1,15 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
+const app = express();
+
 const testRouter = require('./routes/testRouter');
-const productRoutes = require();
+const productRoutes = require('./routes/productRoutes');
 
-app.use(express.json());
 app.use(morgan('dev'));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true}))
 
-
+app.use('/products', productRoutes);
 app.use('/test', testRouter);
 
 app.use((req, res, next) => {
