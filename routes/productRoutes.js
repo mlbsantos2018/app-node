@@ -25,6 +25,7 @@ router.post('/', (req, res, next) => {
     });
 });
 
+//Delete product by Id
 router.delete('/:id', (req, res, next) =>{
     res.status(200).send({
         message: "Product removed successfully"
