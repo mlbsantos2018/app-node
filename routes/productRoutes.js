@@ -2,7 +2,7 @@ const express = require('express');
 const res = require('express/lib/response');
 const router = express.Router();
 
-const products = [
+let products = [
     {
         "id":123,
         "name": "Smartphone Xiaomi note 9 pro"
@@ -17,6 +17,7 @@ const products = [
     }
 ];
 
+
 //Return all products
 router.get('/', (req, res, next) => {
     console.log("Products returned successfully");
@@ -26,21 +27,25 @@ router.get('/', (req, res, next) => {
 //Return product by Id
 router.get('/:id', (req, res, next) => {
 
+    let objectReturn;
+    let statusCode;
+    let productExist = false;
+
     const productId = req.params.id;
 
     products.forEach( product => {
         if(product.id == productId){
-            console.log("Product returned successfully");
-            return res.status(200).json(product);
-        }else{
-            return res.status(404).json({
-                message: "Product not found"
-            });
+            objectReturn = product;
+            productExist = true;
+            statusCode = 200;
         }
     });
 
-    
-
+    if(!productExist){
+        objectReturn = { message: "Product not found"};
+        statusCode = 404;
+    }
+    return res.status(statusCode).json(objectReturn);
 });
 
 //Add product
@@ -53,12 +58,17 @@ router.post('/', (req, res, next) => {
 
     products.push(product);
     console.log("Product created successfully");
+
     return res.status(201).json(product);
+
 });
 
 //Delete product by Id
 router.delete('/:id', (req, res, next) =>{
-
+    
+    let objectReturn;
+    let statusCode;
+    let productExist = false;
     const productId = req.params.id;
 
     products.forEach( product => {
@@ -66,17 +76,23 @@ router.delete('/:id', (req, res, next) =>{
             const index = products.indexOf(product);
             if (index > -1) {
                 products.splice(index, 1);
-                console.log("Product removed successfully");
-                return res.status(200).json({
+                objectReturn = {
                     message: "Product removed successfully"
-                });
-            }else{
-                return res.status(404).json({
-                    message: "Product not found"
-                });
+                };
+                statusCode = 200;
+                productExist = true;
             }
         }
     });
+
+    if(!productExist){
+        objectReturn = {
+            message: "Product not found"
+        }
+        statusCode = 404;
+    }
+
+    return res.status(statusCode).json(objectReturn);
 
 });
 
