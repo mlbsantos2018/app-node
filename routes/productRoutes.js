@@ -47,6 +47,7 @@ router.get('/:id', (req, res, next) => {
     console.log("Searching all products");
     products.forEach( product => {
         if(product.id == productId){
+            console.log("Product found successfully");
             responseBody = product;
             productExist = true;
             statusCode = 200;
@@ -68,7 +69,7 @@ router.post('/', (req, res, next) => {
     };
 
     products.push(product);
-    console.log("Products successfully created");
+    console.log("Product successfully created");
 
     return res.status(201).json(product);
 
@@ -87,6 +88,7 @@ router.delete('/:id', (req, res, next) =>{
             const index = products.indexOf(product);
             if (index > -1) {
                 products.splice(index, 1);
+                console.log("Product successfully removed");
                 responseBody = {
                     message: "Product successfully removed"
                 };
