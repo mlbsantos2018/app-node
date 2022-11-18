@@ -18,37 +18,48 @@ let products = [
 ];
 
 
-//Return all products
 router.get('/', (req, res, next) => {
-    console.log("Products returned successfully");
-    return res.status(200).json(products);
+   
+    let responseBody;
+
+    console.log("Searching all products");
+    if(products.length ===0){
+        console.log("No products found");
+        responseBody = {
+            message: "No products found"
+        }
+    
+    }else{
+        console.log("Successfully found products");
+        responseBody = products;
+    }
+    return res.status(200).json(responseBody);
 });
 
-//Return product by Id
 router.get('/:id', (req, res, next) => {
 
-    let objectReturn;
+    let responseBody;
     let statusCode;
     let productExist = false;
 
     const productId = req.params.id;
 
+    console.log("Searching all products");
     products.forEach( product => {
         if(product.id == productId){
-            objectReturn = product;
+            responseBody = product;
             productExist = true;
             statusCode = 200;
         }
     });
 
     if(!productExist){
-        objectReturn = { message: "Product not found"};
+        responseBody = { message: "Product not found"};
         statusCode = 404;
     }
-    return res.status(statusCode).json(objectReturn);
+    return res.status(statusCode).json(responseBody);
 });
 
-//Add product
 router.post('/', (req, res, next) => {
     
     const product = {
@@ -57,27 +68,27 @@ router.post('/', (req, res, next) => {
     };
 
     products.push(product);
-    console.log("Product created successfully");
+    console.log("Products successfully created");
 
     return res.status(201).json(product);
 
 });
 
-//Delete product by Id
 router.delete('/:id', (req, res, next) =>{
     
-    let objectReturn;
+    let responseBody;
     let statusCode;
     let productExist = false;
     const productId = req.params.id;
 
+    console.log("Searching all products");
     products.forEach( product => {
         if(product.id == productId){
             const index = products.indexOf(product);
             if (index > -1) {
                 products.splice(index, 1);
-                objectReturn = {
-                    message: "Product removed successfully"
+                responseBody = {
+                    message: "Product successfully removed"
                 };
                 statusCode = 200;
                 productExist = true;
@@ -86,14 +97,48 @@ router.delete('/:id', (req, res, next) =>{
     });
 
     if(!productExist){
-        objectReturn = {
+        responseBody = {
             message: "Product not found"
         }
         statusCode = 404;
     }
 
-    return res.status(statusCode).json(objectReturn);
+    return res.status(statusCode).json(responseBody);
+});
 
+router.put('/', (req, res, next) => {
+    let responseBody;
+    let statusCode;
+    let productExist = false;
+
+    console.log("Searching all products");
+    products.forEach( product => {
+        if(product.id == req.body.id){
+
+            const index = products.indexOf(product);
+
+            const productUpdated = {
+                id: req.body.id,
+                name: req.body.name
+            };
+        
+            products[index] = productUpdated;
+            console.log("Product successfully updated");
+
+            responseBody = productUpdated;
+            productExist = true;
+            statusCode = 200;
+        }
+    });
+
+    if(!productExist){
+        responseBody = {
+            message: "Product not found"
+        }
+        statusCode = 404;
+    }
+
+    res.status(statusCode).json(responseBody);
 });
 
 module.exports = router;
